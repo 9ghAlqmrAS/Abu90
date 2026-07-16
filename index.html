@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM BREACH</title>
+    <title>CRITICAL SYSTEM BREACH</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
         }
 
         body {
@@ -21,6 +22,37 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            cursor: pointer;
+        }
+
+        /* شاشة البدء للتفاعل */
+        .click-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #f00;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #f00;
+        }
+
+        .click-screen span {
+            font-size: 14px;
+            color: #888;
+            margin-top: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            50% { opacity: 0.3; }
         }
 
         /* خلفية الماتريكس */
@@ -31,166 +63,236 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            opacity: 0.15;
+            opacity: 0.25;
         }
 
         /* حاوية الرسالة الرئيسية */
         .terminal {
             position: relative;
             z-index: 2;
-            background: rgba(0, 10, 0, 0.85);
-            border: 2px solid #0f0;
-            box-shadow: 0 0 20px #0f0;
+            background: rgba(0, 5, 0, 0.9);
+            border: 2px solid #f00;
+            box-shadow: 0 0 30px #f00;
             padding: 40px;
             text-align: center;
-            max-width: 600px;
+            max-width: 650px;
             width: 90%;
-            border-radius: 8px;
-            animation: glitch 1s linear infinite;
+            border-radius: 10px;
+            animation: glitch 0.5s linear infinite;
+            display: none; /* مخفي حتى يتم الضغط */
         }
 
-        /* تأثير الوميض والخلل */
         @keyframes glitch {
-            0% { box-shadow: 0 0 20px #0f0; }
-            50% { box-shadow: 0 0 25px #0f0, 0 0 10px #f00; border-color: #f00; }
-            100% { box-shadow: 0 0 20px #0f0; }
+            0% { transform: translate(0) skew(0deg); box-shadow: 0 0 30px #f00; }
+            20% { transform: translate(-2px, 2px) skew(-1deg); }
+            40% { transform: translate(-2px, -2px) skew(1deg); }
+            60% { transform: translate(2px, 2px) skew(0deg); box-shadow: 0 0 40px #0f0; border-color: #0f0; }
+            80% { transform: translate(2px, -2px) skew(-1deg); }
+            100% { transform: translate(0) skew(0deg); box-shadow: 0 0 30px #f00; }
         }
 
         .warning-icon {
-            font-size: 50px;
+            font-size: 70px;
             color: #f00;
             margin-bottom: 20px;
-            animation: blink 1s infinite;
+            animation: blink 0.5s infinite alternate;
         }
 
         @keyframes blink {
-            50% { opacity: 0; }
+            from { opacity: 0.2; text-shadow: none; }
+            to { opacity: 1; text-shadow: 0 0 20px #f00; }
         }
 
         h1 {
-            font-size: 28px;
-            margin-bottom: 15px;
+            font-size: 32px;
+            margin-bottom: 20px;
             letter-spacing: 2px;
             color: #f00;
-            text-shadow: 0 0 10px #f00;
+            text-shadow: 0 0 15px #f00;
+        }
+
+        .message-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            min-height: 40px;
         }
 
         .message {
-            font-size: 22px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            border-right: 2px solid #0f0;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 0;
-            animation: typing 3s steps(40) forwards, blink-caret 0.75s step-end infinite;
-        }
-
-        /* تأثير كتابة النص تلقائياً */
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: #0f0; }
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 0 0 10px #0f0;
+            font-weight: bold;
+            border-left: 3px solid #0f0;
+            padding-left: 5px;
         }
 
         .details {
-            font-size: 14px;
-            color: #888;
+            font-size: 15px;
+            color: #aaa;
             border-top: 1px solid #333;
-            padding-top: 15px;
+            padding-top: 20px;
+            text-align: right;
         }
 
         .progress-bar {
             width: 100%;
             background-color: #111;
-            border: 1px solid #0f0;
-            height: 20px;
+            border: 1px solid #f00;
+            height: 25px;
             margin-top: 15px;
             position: relative;
             overflow: hidden;
+            border-radius: 4px;
         }
 
         .progress-fill {
             height: 100%;
-            background-color: #0f0;
+            background: linear-gradient(90deg, #f00, #ff5555);
             width: 0;
-            animation: fillUp 4s ease-in-out forwards;
+            box-shadow: 0 0 10px #f00;
         }
 
-        @keyframes fillUp {
-            to { width: 100%; }
+        .status-text {
+            color: #f00;
+            font-weight: bold;
+            animation: blink 0.8s infinite;
         }
     </style>
 </head>
 <body>
 
+    <!-- شاشة طلب الضغط لتفعيل الصوت والملء الكامل -->
+    <div id="clickScreen" class="click-screen">
+        <div>🔒 اضغط في أي مكان لتشغيل النظام</div>
+        <span>(مطلوب لتفعيل المؤثرات الصوتية وملء الشاشة الكاملة)</span>
+    </div>
+
     <!-- خلفية برمجية متحركة -->
     <canvas id="matrix"></canvas>
 
     <!-- شاشة الاختراق -->
-    <div class="terminal">
+    <div id="terminal" class="terminal">
         <div class="warning-icon">☠</div>
-        <h1>! SYSTEM COMPROMISED !</h1>
-        <div style="display: flex; justify-content: center;">
-            <p class="message">مرحبا عبيد، تم اختراق جهازك من قبل ابنك.</p>
+        <h1>! SYSTEM BREACHED !</h1>
+        
+        <div class="message-container">
+            <p id="typingMessage" class="message"></p>
         </div>
         
         <div class="details">
-            <p>تحميل البيانات الشخصية... <span style="color: #0f0;">مكتمل</span></p>
+            <p>🔧 حالة الاختراق: <span class="status-text">جاري سحب الملفات والصور...</span></p>
             <div class="progress-bar">
-                <div class="progress-fill"></div>
+                <div id="progressBar" class="progress-fill"></div>
             </div>
         </div>
     </div>
 
     <script>
+        // إعداد المؤثرات الصوتية باستخدام محاكي الصوت الداخلي (Web Audio API) لتجنب الحاجة لملفات خارجية
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // صوت إنذار الاختراق اللانهائي
+        function playAlarm() {
+            setInterval(() => {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(300, audioCtx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            }, 600);
+        }
+
+        // صوت تكّة الكيبورد عند ظهور كل حرف
+        function playTypeSound() {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // تفعيل النظام بعد أول ضغطة
+        document.body.addEventListener('click', function startSystem() {
+            // إزالة شاشة البدء وإظهار لوحة الاختراق
+            document.getElementById('clickScreen').style.display = 'none';
+            document.getElementById('terminal').style.display = 'block';
+
+            // تفعيل ملء الشاشة الكاملة
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            }
+
+            // تشغيل الصوت والأنيميشن
+            audioCtx.resume();
+            playAlarm();
+            startTyping();
+            animateProgress();
+
+            // إزالة الحدث حتى لا يتكرر مع الضغطات القادمة
+            document.body.removeEventListener('click', startSystem);
+        });
+
+        // تأثير كتابة النص حرفاً بحرف
+        const messageText = "مرحبا عبيد، تم اختراق جهازك من قبل ابنك.";
+        let index = 0;
+        function startTyping() {
+            if (index < messageText.length) {
+                document.getElementById('typingMessage').innerHTML += messageText.charAt(index);
+                playTypeSound();
+                index++;
+                setTimeout(startTyping, 120); // السرعة بين كل حرف وحرف
+            }
+        }
+
+        // تحريك شريط التحميل بشكل عشوائي ومرعب
+        function animateProgress() {
+            const bar = document.getElementById('progressBar');
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    document.querySelector('.status-text').innerHTML = "اكتمل نقل كافة البيانات بنجاح 😎";
+                    document.querySelector('.status-text').style.color = "#0f0";
+                } else {
+                    width += Math.floor(Math.random() * 8) + 1;
+                    if (width > 100) width = 100;
+                    bar.style.width = width + '%';
+                }
+            }, 300);
+        }
+
         // كود تأثير الماتريكس في الخلفية
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
-
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const katakana = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ1234567890ABCDEF';
-        const alphabet = katakana.split('');
-
+        const alphabet = '01'.split(''); // أرقام باينري لإضافة طابع الاختراق الرقمي
         const fontSize = 16;
         const columns = canvas.width / fontSize;
+        const rainDrops = Array(Math.floor(columns)).fill(1);
 
-        const rainDrops = [];
-
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = 1;
-        }
-
-        const draw = () => {
+        function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             ctx.fillStyle = '#0F0';
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet[Math.floor(Math.random() * alphabet.length)];
                 ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
                 if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
-                rainDrops[i]++;
-            }
-        };
-
-        setInterval(draw, 30);
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>
-</body>
-</html>
