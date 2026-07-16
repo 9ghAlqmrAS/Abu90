@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM BREACH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* خلفية الماتريكس */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+        }
+
+        /* حاوية الرسالة الرئيسية */
+        .terminal {
+            position: relative;
+            z-index: 2;
+            background: rgba(0, 10, 0, 0.85);
+            border: 2px solid #0f0;
+            box-shadow: 0 0 20px #0f0;
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            border-radius: 8px;
+            animation: glitch 1s linear infinite;
+        }
+
+        /* تأثير الوميض والخلل */
+        @keyframes glitch {
+            0% { box-shadow: 0 0 20px #0f0; }
+            50% { box-shadow: 0 0 25px #0f0, 0 0 10px #f00; border-color: #f00; }
+            100% { box-shadow: 0 0 20px #0f0; }
+        }
+
+        .warning-icon {
+            font-size: 50px;
+            color: #f00;
+            margin-bottom: 20px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            color: #f00;
+            text-shadow: 0 0 10px #f00;
+        }
+
+        .message {
+            font-size: 22px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            border-right: 2px solid #0f0;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 3s steps(40) forwards, blink-caret 0.75s step-end infinite;
+        }
+
+        /* تأثير كتابة النص تلقائياً */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #0f0; }
+        }
+
+        .details {
+            font-size: 14px;
+            color: #888;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #111;
+            border: 1px solid #0f0;
+            height: 20px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #0f0;
+            width: 0;
+            animation: fillUp 4s ease-in-out forwards;
+        }
+
+        @keyframes fillUp {
+            to { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- خلفية برمجية متحركة -->
+    <canvas id="matrix"></canvas>
+
+    <!-- شاشة الاختراق -->
+    <div class="terminal">
+        <div class="warning-icon">☠</div>
+        <h1>! SYSTEM COMPROMISED !</h1>
+        <div style="display: flex; justify-content: center;">
+            <p class="message">مرحبا عبيد، تم اختراق جهازك من قبل ابنك.</p>
+        </div>
+        
+        <div class="details">
+            <p>تحميل البيانات الشخصية... <span style="color: #0f0;">مكتمل</span></p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // كود تأثير الماتريكس في الخلفية
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ1234567890ABCDEF';
+        const alphabet = katakana.split('');
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const rainDrops = [];
+
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+
+        setInterval(draw, 30);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
